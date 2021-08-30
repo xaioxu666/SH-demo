@@ -6,5 +6,5 @@ app.get('/xu', (req, res) => {
 
 })
 app.listen(3000, () => {
-  console.log('30eer00rgt');
+  console.log('30eer00r二哥也应该gt');
 })
