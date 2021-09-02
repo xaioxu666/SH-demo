@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+
+  <title>Document</title>
+  <style>
+    .img-le {
+      width: 100px;
+      height: 100px;
+    }
+
+    #box {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    li {
+      list-style: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 登录区域 -->
+  <div class="panel panel-default">
+    <div class="panel-heading " style="text-align: center;"><label>登录表单区域</label></div>
+    <div class="panel-body">
+      <ul class="list-group">
+        <li class="list-group-item">账号:<input type="text" class="form-control" id="name">
+        </li>
+        <li class="list-group-item">密码</input>:<input type="password" class="form-control" id="pwd">
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-success" id="btn">登录</button>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- 注册区域 -->
+  <div class="panel panel-default">
+    <div class="panel-heading " style="text-align: center;"><label>注册表单区域</label></div>
+    <div class="panel-body">
+      <ul class="list-group">
+        <li class="list-group-item">账号:<input type="text" class="form-control" id="zname">
+        </li>
+        <li class="list-group-item">密码</input>:<input type="password" class="form-control" id="zpwd">
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-success " id="zbtn">注册</button>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- 模板渲染 -->
+  <div class="panel panel-default" id="box">循环</div>
+  <!-- 分页显示 -->
+  <div class="panel panel-default">
+    <div class="panel-heading" style="text-align: center;">分页显示</div>
+    <input type="text" id="page" class="form-control">
+    <button class="btn btn-info" style="margin-left: 45%;" id="btnpage">获取分页数据</button>
+    <!-- 分页数据存放区域 -->
+    <ul class="pagelist">
+
+    </ul>
+  </div>
+  <script>
+    var btn = $('#btn')
+    btn.on('click', () => {
+      var name = $('#name').val()
+      var pwd = $('#pwd').val()
+      $.get({
+        url: 'http://localhost:3000/users/login',
+        data: {
+          name: name,
+          pwd: pwd
+        },
+        success: res => {
+          console.log(res);
+        }
+      })
+    })
+    $('#zbtn').on('click', () => {
+      let name = $('#zname').val();
+      let pwd = $('#zpwd').val();
+      $.ajax({
+        url: 'http://localhost:3000/users/reg',
+        type: 'post',
+        data: {
+          name: name,
+          pwd: pwd
+        },
+        success: res => {
+          alert(res.msg)
+        }
+      })
+    })
+
+    data = [];
+    $(() => {
+      $.get('http://localhost:3000/goods'
+        // res.slice(0, 2) 截取数组 从下标为0开始截取 截取两个
+      ).then(res => {
+        var $html = ''
+        data = res
+        data.forEach(item => {
+          $html = $html + `<li>
+		<a href="pro_details.html"><img src="${item.imgPath}" class="img-le img-thumbnail"/></a>
+		<div class="pro_info">
+			<p>￥${item.price}</p>
+			<h4>
+				<button type="button" class="cart_icon addCart btn btn-success" title="点我，加入购物车">+</button>
+				<a href="index.html"> ${item.name} </a>
+				<input type="hidden" value="1" />
+			</h4>
+			<h6>已有1.7万评价<span>2.1万人付款</span></h6>
+		</div>
+	</li>`
+        })
+        var box = $('#box')
+        box.html($html)
+      })
+
+    })
+    // 获取分页数据
+    $('#btnpage').on('click', () => {
+
+      var num = $('#page').val()
+
+      $.get(`http://localhost:3000/pages/users?page=${num}`, (res, err) => {
+        let box = $('.pagelist')
+        var $html = ''
+        res.forEach(e => {
+          $html += `<li>姓名---${e.name}-----年龄---${e.age}</li>`
+        })
+        box.append($html)
+        $('.pagelist li').eq(2).css('background-color', 'pink')
+      })
+    })
+  </script>
+</body>
+
+</html>

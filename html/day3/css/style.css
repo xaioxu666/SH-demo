@@ -1,0 +1,15 @@
+/*网站热帖*/
+.site .list-group-item {
+  padding: 9.5px 15px;
+}
+.userimg{
+  height: 50px;
+  width: 50px;
+}
+.bor{
+  margin-top: 20px !important;
+}
+footer{
+  text-align: center;
+  color:#01aaff
+}
